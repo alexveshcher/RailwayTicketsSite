@@ -1,0 +1,13 @@
+<h1 class='text-center'>Order#new</h1>
+<p>Find me in app/views/order/new.html.erb</p>
+
+
+<%= form_tag("/order/new", method: "get") do %>
+  <%= label_tag(:q, "From:") %>
+  <%= text_field_tag(:q) %>
+  <br>
+  <%= label_tag(:q, "To:") %>
+  <%= text_field_tag(:q) %>
+  <br>
+  <%= submit_tag("Search") %>
+<% end %>
