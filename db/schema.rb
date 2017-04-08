@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170408223345) do
+ActiveRecord::Schema.define(version: 20170408230819) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "condition_groups", force: :cascade do |t|
     t.string   "condition_name"
-    t.string   "type"
+    t.string   "condition_type"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
   end
@@ -46,7 +46,6 @@ ActiveRecord::Schema.define(version: 20170408223345) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.index ["condition_param_id"], name: "index_order_conditions_on_condition_param_id", using: :btree
-    t.index ["order_id", "condition_id"], name: "index_order_conditions_on_order_id_and_condition_id", unique: true, using: :btree
   end
 
   create_table "orders", force: :cascade do |t|
@@ -54,7 +53,6 @@ ActiveRecord::Schema.define(version: 20170408223345) do
     t.integer  "to_city_id"
     t.date     "from_date"
     t.date     "to_date"
-    t.integer  "train_id",     null: false
     t.integer  "task_id"
     t.string   "status"
     t.datetime "created_at",   null: false
