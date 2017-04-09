@@ -3,6 +3,6 @@ class WelcomeController < ApplicationController
   end
 
   def send_email
-    UserMailer.welcome_email('username').deliver_now
+    HardWorker.perform_in(30.seconds)
   end
 end

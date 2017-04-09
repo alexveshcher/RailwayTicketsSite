@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
+
   root to: 'welcome#index'
   get 'welcome/index'
   post 'welcome/send_email'
