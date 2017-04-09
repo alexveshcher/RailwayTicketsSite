@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170409201105) do
+ActiveRecord::Schema.define(version: 20170409205513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,8 +26,10 @@ ActiveRecord::Schema.define(version: 20170409201105) do
   create_table "condition_params", force: :cascade do |t|
     t.string   "name"
     t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "condition_id"
+    t.index ["condition_id"], name: "index_condition_params_on_condition_id", using: :btree
   end
 
   create_table "conditions", force: :cascade do |t|
@@ -62,6 +64,7 @@ ActiveRecord::Schema.define(version: 20170409201105) do
     t.datetime "updated_at",   null: false
   end
 
+  add_foreign_key "condition_params", "conditions"
   add_foreign_key "conditions", "condition_groups"
   add_foreign_key "order_conditions", "condition_params"
   add_foreign_key "order_conditions", "conditions"
