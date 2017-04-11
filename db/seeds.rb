@@ -1,3 +1,11 @@
+ConditionGroup.create!([
+  {condition_name: "Place type", condition_type: "place", handler_name: "place_type_filter"},
+  {condition_name: "Coach type", condition_type: "train", handler_name: "coach_type_filter"},
+  {condition_name: "Price", condition_type: "coach", handler_name: "price_filter"},
+  {condition_name: "Place quantity", condition_type: "last", handler_name: "place_quantity_filter"},
+  {condition_name: "Train number", condition_type: "train", handler_name: "train_number_filter"}
+])
+
 Condition.create!([
   {name: "train_numbers", value_type: "S", condition_group_id: 3, sysname: nil},
   {name: "coach_types", value_type: "C", condition_group_id: 4, sysname: nil},
@@ -6,13 +14,7 @@ Condition.create!([
   {name: "place_type", value_type: "C", condition_group_id: 7, sysname: nil},
   {name: "places_quantity", value_type: "I", condition_group_id: 6, sysname: nil}
 ])
-ConditionGroup.create!([
-  {condition_name: "Place type", condition_type: "place", handler_name: "place_type_filter"},
-  {condition_name: "Coach type", condition_type: "train", handler_name: "coach_type_filter"},
-  {condition_name: "Price", condition_type: "coach", handler_name: "price_filter"},
-  {condition_name: "Place quantity", condition_type: "last", handler_name: "place_quantity_filter"},
-  {condition_name: "Train number", condition_type: "train", handler_name: "train_number_filter"}
-])
+
 ConditionParam.create!([
   {name: "Плацкарт", value: "П", condition_id: 2},
   {name: "Нижнє місце", value: "down", condition_id: 4}
