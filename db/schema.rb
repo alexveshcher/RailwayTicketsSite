@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170409205513) do
     t.integer  "condition_param_id"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
+    t.string   "string_value"
     t.index ["condition_param_id"], name: "index_order_conditions_on_condition_param_id", using: :btree
   end
 

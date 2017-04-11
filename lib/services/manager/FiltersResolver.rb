@@ -6,7 +6,7 @@ require_relative '../train/TrainNumberFilter.rb'
 
 class FilterResolver
 
-  def getFilters(condition_groups)
+  def get_filters(condition_groups)
     filters = Hash.new
     filters['train'] = []
     filters['coach'] = []
@@ -14,13 +14,13 @@ class FilterResolver
     filters['last'] = []
 
     condition_groups.each do |condition_group|
-      filters[condition_group['type']] << getFilter(condition_group['handler_name'], condition_group)
+      filters[condition_group['type']] << get_filter(condition_group['handler_name'], condition_group)
     end
 
     filters
   end
 
-  def getFilter(handler_name, condition_group)
+  def get_filter(handler_name, condition_group)
     if handler_name == 'train_number_filter'
       return {'filter' => TrainNumberFilter.new, 'condition_group' => condition_group}
     elsif handler_name == 'coach_type_filter'

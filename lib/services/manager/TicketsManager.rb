@@ -3,7 +3,7 @@ require_relative 'FiltersResolver.rb'
 require 'time'
 
 class TicketsManager
-  def findAcceptableTickets(station_id_from, station_id_till, departure_date, condition_groups)
+  def find_acceptable_tickets(station_id_from, station_id_till, departure_date, condition_groups)
 
     train_coaches = Array.new
     last_preparation = Array.new
@@ -12,7 +12,7 @@ class TicketsManager
     filter_resolver = FilterResolver.new
     ukr_railway = UkrRailway.new
 
-    filters = filter_resolver.getFilters condition_groups
+    filters = filter_resolver.get_filters condition_groups
 
     trains = ukr_railway.get_tickets_beetwen_stations(station_id_from, station_id_till, departure_date)['value']
 
@@ -110,16 +110,16 @@ class TicketsManager
       end
     end
 
-    # puts result
+    puts result
 
     result
   end
 end
 
-# t = TicketsManager.new
-# t.findAcceptableTickets(2218155, 2200001, '29.04.2017', [
-#   {'type' => 'train', 'train_numbers' => ['050Л'], 'handler_name' => 'train_number_filter'},
-#   {'type' => 'train', 'coach_types' => ['П'], 'handler_name' => 'coach_type_filter'},
-#   {'type' => 'coach', 'min_price' => 0, 'max_price' => 15000, 'handler_name' => 'price_filter'},
-#   {'type' => 'place', 'place_type' => 'down', 'handler_name' => 'place_type_filter'},
-#   {'type' => 'last', 'places_quantity' => 4, 'handler_name' => 'place_quantity_filter'}])
+ # t = TicketsManager.new
+ # t.find_acceptable_tickets(2218155, 2200001, '29.04.2017', [
+ #   {"type"=>"train", "handler_name"=>"train_number_filter", "params"=>{"train_numbers"=>["050Л"]}},
+ #   {"type"=>"train", "handler_name"=>"coach_type_filter", "params"=>{"coach_types"=>["П"]}},
+ #   {"type"=>"place", "handler_name"=>"place_type_filter", "params"=>{"place_type"=>["down"]}},
+ #   {"type"=>"last", "handler_name"=>"place_quantity_filter", "params"=>{"places_quantity"=>[2]}},
+ #   {"type"=>"coach", "handler_name"=>"price_filter", "params"=>{"min_price"=>[0], "max_price"=>[150000]}}])

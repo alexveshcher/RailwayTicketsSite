@@ -1,7 +1,7 @@
 class CoachTypeFilter
   def filter(trains, condition_group)
     result = Array.new
-    coach_types = condition_group['coach_types']
+    coach_types = condition_group['params']['coach_types']
 
     trains.each do |train|
       types = train['types']

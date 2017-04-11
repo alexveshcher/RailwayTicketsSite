@@ -3,7 +3,7 @@ class TrainNumberFilter
   def filter(trains, condition_group)
 
     result = Array.new
-    train_numbers = condition_group['train_numbers']
+    train_numbers = condition_group['params']['train_numbers']
 
     trains.each do |train|
       num = train['num']

@@ -1,6 +1,6 @@
 class PlaceTypeFilter
   def filter(places, condition_group, train, coach)
-    place_type = condition_group['place_type']
+    place_type = condition_group['params']['place_type'][0]
 
     if place_type != 'down' || coach['type'] != 'П'
       return places
