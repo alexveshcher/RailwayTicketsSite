@@ -1,13 +1,124 @@
-<h1 class='text-center'>Order#new</h1>
-<p>Find me in app/views/order/new.html.erb</p>
+<div id="page-wrapper">
+  <h1>Datalist Element Demo</h1>
+
+  <label for="default">Pick a programming language</label>
+  <input type="text" id="default" list="languages" placeholder="e.g. JavaScript">
+
+  <datalist id="languages">
+    <option id="22" value="HTML">
+    <option value="CSS">
+    <option value="JavaScript">
+    <option value="Java">
+    <option value="Ruby">
+    <option value="PHP">
+    <option value="Go">
+    <option value="Erlang">
+    <option value="Python">
+    <option value="C">
+    <option value="C#">
+    <option value="C++">
+  </datalist>
 
 
-<%= form_tag("/order/new", method: "get") do %>
-  <%= label_tag(:q, "From:") %>
-  <%= text_field_tag(:q) %>
-  <br>
-  <%= label_tag(:q, "To:") %>
-  <%= text_field_tag(:q) %>
-  <br>
-  <%= submit_tag("Search") %>
-<% end %>
+  <label for="ajax">Pick an HTML Element (options loaded using AJAX)</label>
+  <input type="text" id="ajax" list="json-datalist" placeholder="e.g. datalist">
+  <datalist id="json-datalist"></datalist>
+
+
+</div>
+
+<h1>Add new order</h1>
+
+<%= form_tag 'create',  class: 'container' do %>
+	<p><label for = "from_city_id">From</label>:<br/>
+	<%= number_field 'orders', 'from_city_id' %></p>
+
+	<p><label for = "to_city_id">To</label>:<br/>
+	<%= number_field 'orders', 'to_city_id' %></p>
+
+	<p><label for = "from_date">From date</label>:<br/>
+	<%= date_field 'orders', 'from_date' %></p>
+
+	<p><label for = "to_date">To date</label>:<br/>
+	<%= date_field 'orders', 'to_date' %></p>
+
+	<% @condition_groups.each do |condition_group| %>
+		<hr/>
+		<div>
+			<%= condition_group.condition_name %> <%= check_box_tag "on[#{condition_group.id}]" %>
+			<hr/>
+		  <% condition_group.conditions.each do |condition| %>
+			  <% if condition.value_type == 'C' %>
+					<%= condition.name %>
+					<br/>
+					<%= select_tag :condition_param_ids, options_for_select(condition.condition_params.map {|u| [u.name, u.id]}),:multiple => true, :name =>"#{condition_group.id}[#{condition.id}]"  %>
+			  <% elsif condition.value_type == 'S' %>
+          <%= condition.name %>
+					<br/>
+					<%= text_field condition_group.id, condition.id -%><br/>
+			  <% else %>
+			    <%= condition.name %>
+					<br/>
+					<%= number_field condition_group.id, condition.id -%><br/>
+			  <% end %>
+			<% end %>
+		</div>
+	<% end %>
+	<hr/>
+
+	<%= submit_tag "Create" %>
+
+<% end -%>
+<%= link_to 'Back', {:action => 'list'} %>
+<script>
+// Get the <datalist> and <input> elements.
+var dataList = document.getElementById('json-datalist');
+var input = document.getElementById('ajax');
+
+var isRunning = false;
+
+// Create a new XMLHttpRequest.
+var request = new XMLHttpRequest();
+
+// Handle state changes for the request.
+request.onreadystatechange = function(response) {
+  if (request.readyState === 4) {
+    if (request.status === 200) {
+      // Parse the JSON
+      var jsonOptions = JSON.parse(request.responseText);
+
+      // Loop over the JSON array.
+      jsonOptions.forEach(function(item) {
+        // Create a new <option> element.
+        var option = document.createElement('option');
+        // Set the value using the item in the JSON array.
+        option.value = item.label;
+        option.innerHTML = item.value;
+        // Add the <option> element to the <datalist>.
+        dataList.appendChild(option);
+      });
+
+      // Update the placeholder text.
+      input.placeholder = "e.g. datalist";
+    } else {
+      // An error occured :(
+      input.placeholder = "Couldn't load datalist options :(";
+    }
+  }
+};
+
+input.addEventListener('input', function (evt) {
+  if(!isRunning){
+    isRunning = true;
+
+    // Set up and make the request.
+    request.open('GET', 'http://localhost:3000/places/get_stations/' + input.value, true);
+    request.send();
+
+    isRunning = false;
+  }
+});
+
+input.placeholder = "Loading options...";
+
+</script>
