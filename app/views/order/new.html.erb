@@ -30,7 +30,7 @@
       			  <% if condition.value_type == 'C' %>
       					<%= condition.name %>
       					<br/>
-      					<%= select_tag :condition_param_ids, options_for_select(condition.condition_params.map {|u| [u.name, u.id]}),:multiple => true, :name =>"#{condition_group.id}[#{condition.id}]"  %>
+      					<%= select_tag "#{condition_group.id}[#{condition.id}]", options_for_select(condition.condition_params.map {|u| [u.name, u.id]}), :multiple => true  %>
       			  <% elsif condition.value_type == 'S' %>
                 <%= condition.name %>
       					<br/>
