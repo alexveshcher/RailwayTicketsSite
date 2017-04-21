@@ -32,8 +32,10 @@ class DbPreparation
 
     plats = ConditionParam.new({name: "Плацкарт", value: "П", condition_id: coach_types.id})
     down_place = ConditionParam.new({name: "Нижнє місце", value: "down", condition_id: place_types.id})
+    up_place = ConditionParam.new({name: "Верхнє місце", value: "up", condition_id: place_types.id})
 
     plats.save
+    up_place.save
     down_place.save
   end
 end

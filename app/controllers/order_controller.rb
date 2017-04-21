@@ -10,7 +10,7 @@ class OrderController < ApplicationController
     @order.user_id = current_user.id
     @order.status = 'Open'
 
-
+    puts @order
     # TODO create job here
     # MonitorWorker.perform_in(10.seconds, @order)
     # @order.task_id = 5
@@ -46,23 +46,27 @@ class OrderController < ApplicationController
 
         order_conditions_hash.each do |id, values|
           current_order_condition = Condition.find(id)
-          puts values
 
           if current_order_condition.value_type == 'C'
-            order_condition = OrderCondition.new({'condition_param_id' => values, 'condition_id' => id})
-            result << order_condition
+            values.each do |value|
+              order_condition = OrderCondition.new({'condition_param_id' => value, 'condition_id' => id})
+              result << order_condition
+            end
           elsif current_order_condition.value_type == 'S'
-            order_condition = OrderCondition.new({'string_value' => values, 'condition_id' => id})
-            result << order_condition
+            if !values.nil?
+              values.split(/, /).each do |value|
+                order_condition = OrderCondition.new({'string_value' => value, 'condition_id' => id})
+                result << order_condition
+              end
+            end
           else
-            order_condition = OrderCondition.new({'number_value' => values, 'condition_id' => id})
-            result << order_condition
+            if !values.nil?
+              order_condition = OrderCondition.new({'number_value' => values, 'condition_id' => id})
+            end
           end
-
         end
     end
 
-    puts result.length
     result
   end
 
