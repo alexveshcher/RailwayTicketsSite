@@ -11,8 +11,6 @@ Condition.create!([
   {name: "coach_types", value_type: "C", condition_group_id: 4, sysname: nil},
   {name: "max_price", value_type: "I", condition_group_id: 5, sysname: nil},
   {name: "min_price", value_type: "I", condition_group_id: 5, sysname: nil},
-  {name: "place_type", value_type: "C", condition_group_id: 7, sysname: nil},
-  {name: "places_quantity", value_type: "I", condition_group_id: 6, sysname: nil}
 ])
 
 ConditionParam.create!([
@@ -26,7 +24,5 @@ OrderCondition.create!([
   {order_id: 1, condition_id: 1, number_value: nil, condition_param_id: nil, string_value: "050Л"},
   {order_id: 1, condition_id: 2, number_value: nil, condition_param_id: 1, string_value: nil},
   {order_id: 1, condition_id: 4, number_value: nil, condition_param_id: 2, string_value: nil},
-  {order_id: 1, condition_id: 5, number_value: 2, condition_param_id: nil, string_value: nil},
-  {order_id: 1, condition_id: 6, number_value: 0, condition_param_id: nil, string_value: nil},
   {order_id: 1, condition_id: 3, number_value: 150000, condition_param_id: nil, string_value: nil}
 ])

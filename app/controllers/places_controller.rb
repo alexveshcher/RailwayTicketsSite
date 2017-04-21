@@ -1,4 +1,4 @@
-require_relative '../../lib/services/api/UkrRailway.rb'
+require_relative '../../lib/services/api/ukr_railway.rb'
 
 class PlacesController < ApplicationController
   def get_stations

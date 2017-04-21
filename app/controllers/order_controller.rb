@@ -7,6 +7,13 @@ class OrderController < ApplicationController
   def create
 
 	  @order = Order.new(order_params)
+    @order.user_id = current_user.id
+    @order.status = 'Open'
+
+
+    # TODO create job here
+    # MonitorWorker.perform_in(10.seconds, @order)
+    # @order.task_id = 5
 
     @condition_groups = ConditionGroup.all
 
@@ -25,7 +32,7 @@ class OrderController < ApplicationController
   end
 
   def order_params
-	  params.require(:orders).permit(:from_city_id, :to_city_id, :from_date, :to_date, :task_id, :status)
+	  params.require(:orders).permit(:from_city_id, :to_city_id, :from_date, :to_date)
   end
 
   def order_condition_params

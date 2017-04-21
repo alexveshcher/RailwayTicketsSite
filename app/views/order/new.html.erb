@@ -1,48 +1,59 @@
-<h1>Add new order</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-offset-4 col-md-4">
+      <h1 class="text-center">Create your order</h1>
+      <%= form_tag 'create' do %>
+        <div class="form-group">
+          <p><label for = "from_city_id">From</label><br/>
+						<input type="text" id="from_city_id" list="from_datalist" placeholder="e.g. datalist">
+						<datalist id="from_datalist"></datalist>
+					</p>
+        </div>
 
-<%= form_tag 'create',  class: 'container' do %>
-	<p><label for = "from_city_id">From</label>:<br/>
-	<input type="text" id="from_city_id" list="from_datalist" placeholder="e.g. datalist">
-	<datalist id="from_datalist"></datalist>
 
-	<p><label for = "to_city_id">To</label>:<br/>
-	<input type="text" id="to_city_id" list="to_datalist" placeholder="e.g. datalist">
-	<datalist id="to_datalist"></datalist>
+      	<p><label for = "to_city_id">To</label><br/>
+				<input type="text" id="to_city_id" list="to_datalist" placeholder="e.g. datalist">
+				<datalist id="to_datalist"></datalist>
 
-	<p><label for = "from_date">From date</label>:<br/>
-	<%= date_field 'orders', 'from_date' %></p>
+      	<p><label for = "from_date">From date</label><br/>
+      	<%= date_field 'orders', 'from_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
 
-	<p><label for = "to_date">To date</label>:<br/>
-	<%= date_field 'orders', 'to_date' %></p>
+      	<p><label for = "to_date">To date</label><br/>
+      	<%= date_field 'orders', 'to_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
 
-	<% @condition_groups.each do |condition_group| %>
-		<hr/>
-		<div>
-			<%= condition_group.condition_name %> <%= check_box_tag "on[#{condition_group.id}]" %>
-			<hr/>
-		  <% condition_group.conditions.each do |condition| %>
-			  <% if condition.value_type == 'C' %>
-					<%= condition.name %>
-					<br/>
-					<%= select_tag :condition_param_ids, options_for_select(condition.condition_params.map {|u| [u.name, u.id]}),:multiple => true, :name =>"#{condition_group.id}[#{condition.id}]"  %>
-			  <% elsif condition.value_type == 'S' %>
-          <%= condition.name %>
-					<br/>
-					<%= text_field condition_group.id, condition.id -%><br/>
-			  <% else %>
-			    <%= condition.name %>
-					<br/>
-					<%= number_field condition_group.id, condition.id -%><br/>
-			  <% end %>
-			<% end %>
-		</div>
-	<% end %>
-	<hr/>
+      	<% @condition_groups.each do |condition_group| %>
+      		<hr/>
+      		<div>
+      			<%= condition_group.condition_name %> <%= check_box_tag "on[#{condition_group.id}]" %>
+      			<hr/>
+      		  <% condition_group.conditions.each do |condition| %>
+      			  <% if condition.value_type == 'C' %>
+      					<%= condition.name %>
+      					<br/>
+      					<%= select_tag :condition_param_ids, options_for_select(condition.condition_params.map {|u| [u.name, u.id]}),:multiple => true, :name =>"#{condition_group.id}[#{condition.id}]"  %>
+      			  <% elsif condition.value_type == 'S' %>
+                <%= condition.name %>
+      					<br/>
+      					<%= text_field condition_group.id, condition.id -%><br/>
+      			  <% else %>
+      			    <%= condition.name %>
+      					<br/>
+      					<%= number_field condition_group.id, condition.id -%><br/>
+      			  <% end %>
+      			<% end %>
+      		</div>
+      	<% end %>
+      	<!-- <hr/> -->
 
-	<%= submit_tag "Create" %>
+      	<%= submit_tag "Create", class: 'btn btn-success' %>
 
-<% end -%>
-<%= link_to 'Back', {:action => 'list'} %>
+      <% end -%>
+    </div>
+  </div>
+</div>
+
+
+<!-- <%= link_to 'Back', {:action => 'list'} %> -->
 <script>
 // Get the <datalist> and <input> elements.
 var toDataList = document.getElementById('to_datalist');

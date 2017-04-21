@@ -1,5 +1,5 @@
-require_relative '../api/UkrRailway.rb'
-require_relative 'FiltersResolver.rb'
+require_relative '../api/ukr_railway.rb'
+require_relative 'filters_resolver.rb'
 require 'time'
 
 class TicketsManager

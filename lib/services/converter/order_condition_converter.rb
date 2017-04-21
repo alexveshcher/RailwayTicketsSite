@@ -20,16 +20,16 @@ class OrderConditionConverter
       current_condition_values = saved_condition_group['params'][current_condition.id]
 
       if current_condition_values.nil?
-        saved_condition_group['params'][current_condition.name] = Array.new
+        saved_condition_group['params'][current_condition.sysname] = Array.new
         current_condition_values = saved_condition_group['params'][current_condition.id]
       end
 
       if current_condition.value_type == 'C'
-        saved_condition_group['params'][current_condition.name] << order_condition.condition_param.value
+        saved_condition_group['params'][current_condition.sysname] << order_condition.condition_param.value
       elsif current_condition.value_type == 'I'
-        saved_condition_group['params'][current_condition.name] << order_condition.number_value
+        saved_condition_group['params'][current_condition.sysname] << order_condition.number_value
       else
-        saved_condition_group['params'][current_condition.name] << order_condition.string_value
+        saved_condition_group['params'][current_condition.sysname] << order_condition.string_value
       end
     end
 
