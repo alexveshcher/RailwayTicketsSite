@@ -1,40 +1,13 @@
-<div id="page-wrapper">
-  <h1>Datalist Element Demo</h1>
-
-  <label for="default">Pick a programming language</label>
-  <input type="text" id="default" list="languages" placeholder="e.g. JavaScript">
-
-  <datalist id="languages">
-    <option id="22" value="HTML">
-    <option value="CSS">
-    <option value="JavaScript">
-    <option value="Java">
-    <option value="Ruby">
-    <option value="PHP">
-    <option value="Go">
-    <option value="Erlang">
-    <option value="Python">
-    <option value="C">
-    <option value="C#">
-    <option value="C++">
-  </datalist>
-
-
-  <label for="ajax">Pick an HTML Element (options loaded using AJAX)</label>
-  <input type="text" id="ajax" list="json-datalist" placeholder="e.g. datalist">
-  <datalist id="json-datalist"></datalist>
-
-
-</div>
-
 <h1>Add new order</h1>
 
 <%= form_tag 'create',  class: 'container' do %>
 	<p><label for = "from_city_id">From</label>:<br/>
-	<%= number_field 'orders', 'from_city_id' %></p>
+	<input type="text" id="from_city_id" list="from_datalist" placeholder="e.g. datalist">
+	<datalist id="from_datalist"></datalist>
 
 	<p><label for = "to_city_id">To</label>:<br/>
-	<%= number_field 'orders', 'to_city_id' %></p>
+	<input type="text" id="to_city_id" list="to_datalist" placeholder="e.g. datalist">
+	<datalist id="to_datalist"></datalist>
 
 	<p><label for = "from_date">From date</label>:<br/>
 	<%= date_field 'orders', 'from_date' %></p>
@@ -72,20 +45,53 @@
 <%= link_to 'Back', {:action => 'list'} %>
 <script>
 // Get the <datalist> and <input> elements.
-var dataList = document.getElementById('json-datalist');
-var input = document.getElementById('ajax');
+var toDataList = document.getElementById('to_datalist');
+var toInput = document.getElementById('to_city_id');
 
-var isRunning = false;
+var fromDataList = document.getElementById('from_datalist');
+var fromInput = document.getElementById('from_city_id');
 
+var toIsRunning = false;
+var fromIsRunning = false;
+
+var fromRequest = new XMLHttpRequest();
+var toRequest = new XMLHttpRequest();
+
+toInput.addEventListener('input', function (evt) {
+  if(!toIsRunning){
+    toIsRunning = true;
+
+		if(toInput.value && toInput.value.length > 2){
+		// Set up and make the request.
+		toRequest.open('GET', 'http://localhost:3000/places/get_stations/' + toInput.value, true);
+		toRequest.send();
+		}
+		toIsRunning = false;
+  }
+});
+
+fromInput.addEventListener('input', function (evt) {
+  if(!fromIsRunning){
+    fromIsRunning = true;
+
+		if(fromInput.value && fromInput.value.length > 2){
+		// Set up and make the request.
+		fromRequest.open('GET', 'http://localhost:3000/places/get_stations/' + fromInput.value, true);
+		fromRequest.send();
+		}
+
+		fromIsRunning = false;
+  }
+});
 // Create a new XMLHttpRequest.
-var request = new XMLHttpRequest();
+
 
 // Handle state changes for the request.
-request.onreadystatechange = function(response) {
-  if (request.readyState === 4) {
-    if (request.status === 200) {
+fromRequest.onreadystatechange = function(response) {
+  if (fromRequest.readyState === 4) {
+    if (fromRequest.status === 200) {
       // Parse the JSON
-      var jsonOptions = JSON.parse(request.responseText);
+      var jsonOptions = JSON.parse(fromRequest.responseText);
 
       // Loop over the JSON array.
       jsonOptions.forEach(function(item) {
@@ -95,30 +101,47 @@ request.onreadystatechange = function(response) {
         option.value = item.label;
         option.innerHTML = item.value;
         // Add the <option> element to the <datalist>.
-        dataList.appendChild(option);
+        fromDataList.appendChild(option);
       });
 
       // Update the placeholder text.
-      input.placeholder = "e.g. datalist";
+      fromInput.placeholder = "завантаження...";
     } else {
       // An error occured :(
-      input.placeholder = "Couldn't load datalist options :(";
+      fromInput.placeholder = "Невдала спроба! Спробуйте, будь ласка, пізніше";
     }
   }
 };
 
-input.addEventListener('input', function (evt) {
-  if(!isRunning){
-    isRunning = true;
+// Handle state changes for the request.
+toRequest.onreadystatechange = function(response) {
+  if (toRequest.readyState === 4) {
+    if (toRequest.status === 200) {
+      // Parse the JSON
+      var jsonOptions = JSON.parse(toRequest.responseText);
 
-    // Set up and make the request.
-    request.open('GET', 'http://localhost:3000/places/get_stations/' + input.value, true);
-    request.send();
+      // Loop over the JSON array.
+      jsonOptions.forEach(function(item) {
+        // Create a new <option> element.
+        var option = document.createElement('option');
+        // Set the value using the item in the JSON array.
+        option.value = item.label;
+        option.innerHTML = item.value;
+        // Add the <option> element to the <datalist>.
+        toDataList.appendChild(option);
+      });
 
-    isRunning = false;
+      // Update the placeholder text.
+      toInput.placeholder = "завантаження...";
+    } else {
+      // An error occured :(
+      toInput.placeholder = "Невдала спроба! Спробуйте, будь ласка, пізніше";
+    }
   }
-});
+};
 
-input.placeholder = "Loading options...";
+// Update the placeholder text.
+fromInput.placeholder = "Виберіть місто відправлення...";
+toInput.placeholder = "Виберіть місто прибуття...";
 
 </script>
