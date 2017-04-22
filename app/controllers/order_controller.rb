@@ -11,6 +11,18 @@ class OrderController < ApplicationController
     @order.status = 'Open'
 
     # TODO create job here
+    scheduler = Rufus::Scheduler.new
+    scheduler.every '5s' do |job|
+      status = Order.find(@order.id).status
+      if(status == 'Open')
+        puts @order.status
+      else
+        puts 'Order is no longer open'
+        job.unschedule
+      end
+    end
+    # @order.task_id = job_id
+
     # MonitorWorker.perform_in(10.seconds, @order)
     # @order.task_id = 5
 
