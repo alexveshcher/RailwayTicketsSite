@@ -46,6 +46,16 @@ class OrderController < ApplicationController
         order_condition.save
       end
 
+      order_condition_converter = OrderConditionConverter.new
+      hash_order = order_condition_converter.convert(@order.order_conditions)
+      # puts hash_order
+
+      tickets_manager = TicketsManager.new
+
+      res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
+      puts res
+      UserMailer.welcome_email(res.to_s).deliver_now
+
       redirect_to :action => 'list'
 	  else
 		  render :action => 'new'
