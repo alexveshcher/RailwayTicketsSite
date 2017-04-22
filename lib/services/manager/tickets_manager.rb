@@ -17,6 +17,9 @@ class TicketsManager
     trains = ukr_railway.get_tickets_beetwen_stations(station_id_from, station_id_till, departure_date)['value']
 
     trains_filters = filters['train']
+    coaches_filters = filters['coach']
+    places_filters = filters['place']
+    last_filters = filters['last']
 
     trains_filters.each do |trains_filter|
       trains = trains_filter['filter'].filter(trains, trains_filter['condition_group'])
@@ -25,7 +28,9 @@ class TicketsManager
     # trains are collected
     # it's time to collect coaches
 
-    coaches_filters = filters['coach']
+    if coaches_filters.empty? && places_filters.empty? && last_filters.empty?
+      return trains
+    end
 
     trains.each do |train|
       coaches = Array.new
@@ -51,7 +56,9 @@ class TicketsManager
     # coaches are collected
     # it's time to collect places
 
-    places_filters = filters['place']
+    if places_filters.empty? && last_filters.empty?
+      return train_coaches
+    end
 
     train_coaches.each do |train_coach|
       current_train = train_coach['train']
@@ -69,7 +76,7 @@ class TicketsManager
         places = ukr_railway.get_tickets_for_coach(station_id_from, station_id_till, Time.parse(departure_date).to_i, current_train_id, current_coach_id, current_coach_num)['value']['places'][current_coach_class]
 
         places_filters.each do |place_filter|
-           places = place_filter['filter'].filter(places, place_filter['condition_group'], current_train, current_coach)
+          places = place_filter['filter'].filter(places, place_filter['condition_group'], current_train, current_coach)
         end
 
         if places.length > 0
@@ -82,10 +89,12 @@ class TicketsManager
       end
     end
 
+    if last_filters.empty?
+      return last_preparation
+    end
+
     # places are collected
     # it's time to use the last filters
-
-    last_filters = filters['last']
 
     last_preparation.each do |example|
       last_coaches = example['coaches']

@@ -1,5 +1,5 @@
 class OrderConditionConverter
-  def convert(order_conditions, from_id, to_id, date)
+  def convert(order_conditions)
     result = Hash.new
 
     order_conditions.each do |order_condition|

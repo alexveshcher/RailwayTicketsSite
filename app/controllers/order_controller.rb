@@ -1,7 +1,18 @@
+require_relative '../../lib/services/converter/order_condition_converter.rb'
+require_relative '../../lib/services/manager/tickets_manager.rb'
+
 class OrderController < ApplicationController
   def new
 	  @order = Order.new
     @condition_groups = ConditionGroup.all
+
+    # current_order = Order.find(16)
+    # order_condition_converter = OrderConditionConverter.new
+    # hash_order = order_condition_converter.convert(current_order.order_conditions)
+    # puts hash_order
+    #
+    # tickets_manager = TicketsManager.new
+    # puts tickets_manager.find_acceptable_tickets(2218155, 2200001, '25.04.2017', hash_order)
   end
 
   def create
@@ -11,16 +22,16 @@ class OrderController < ApplicationController
     @order.status = 'Open'
 
     # TODO create job here
-    scheduler = Rufus::Scheduler.new
-    scheduler.every '5s' do |job|
-      status = Order.find(@order.id).status
-      if(status == 'Open')
-        puts @order.status
-      else
-        puts 'Order is no longer open'
-        job.unschedule
-      end
-    end
+    # scheduler = Rufus::Scheduler.new
+    # scheduler.every '5s' do |job|
+    #   status = Order.find(@order.id).status
+    #   if(status == 'Open')
+    #     puts @order.status
+    #   else
+    #     puts 'Order is no longer open'
+    #     job.unschedule
+    #   end
+    # end
     # @order.task_id = job_id
 
     # MonitorWorker.perform_in(10.seconds, @order)
