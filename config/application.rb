@@ -12,6 +12,8 @@ module RailwayTickets
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.sass.preferred_syntax = :sass
+    config.enable_dependency_loading = true
+
     # config.cache_store = :redis_store, {
     #   host: "localhost",
     #   port: 6379,

@@ -1,5 +1,5 @@
-require_relative '../../lib/services/converter/order_condition_converter.rb'
-require_relative '../../lib/services/manager/tickets_manager.rb'
+# require_relative '../../lib/services/converter/order_condition_converter.rb'
+# require_relative '../../lib/services/manager/tickets_manager.rb'
 
 class OrderController < ApplicationController
   def new

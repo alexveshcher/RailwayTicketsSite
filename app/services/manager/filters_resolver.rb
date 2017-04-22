@@ -1,8 +1,8 @@
-require_relative '../train/coach_type_filter.rb'
-require_relative '../place/place_type_filter.rb'
-require_relative '../last/place_quantity_filter.rb'
-require_relative '../coach/price_filter.rb'
-require_relative '../train/train_number_filter.rb'
+# require_relative '../train/coach_type_filter.rb'
+# require_relative '../place/place_type_filter.rb'
+# require_relative '../last/place_quantity_filter.rb'
+# require_relative '../coach/price_filter.rb'
+# require_relative '../train/train_number_filter.rb'
 
 class FilterResolver
 
