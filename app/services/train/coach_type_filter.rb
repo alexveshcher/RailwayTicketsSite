@@ -1,5 +1,10 @@
 class CoachTypeFilter
   def filter(trains, condition_group)
+
+    if condition_group['params']['coach_types'].empty?
+      return trains
+    end
+
     result = Array.new
     coach_types = condition_group['params']['coach_types']
 
