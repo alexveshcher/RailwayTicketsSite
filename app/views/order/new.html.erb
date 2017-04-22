@@ -22,25 +22,27 @@
       	<%= date_field 'orders', 'to_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
 
       	<% @condition_groups.each do |condition_group| %>
-      		<hr/>
       		<div>
-      			<%= condition_group.condition_name %> <%= check_box_tag "on[#{condition_group.id}]" %>
-      			<hr/>
-      		  <% condition_group.conditions.each do |condition| %>
-      			  <% if condition.value_type == 'C' %>
-      					<%= condition.name %>
-      					<br/>
-      					<%= select_tag "#{condition_group.id}[#{condition.id}]", options_for_select(condition.condition_params.map {|u| [u.name, u.id]}), :multiple => true  %>
-      			  <% elsif condition.value_type == 'S' %>
+            <hr/>
+      		  <%= condition_group.condition_name %> <%= check_box_tag "on[#{condition_group.id}]" %>
+            <div>
+      			  <hr/>
+      		    <% condition_group.conditions.each do |condition| %>
+      			    <% if condition.value_type == 'C' %>
+      					  <%= condition.name %>
+      					  <br/>
+      					  <%= select_tag "#{condition_group.id}[#{condition.id}]", options_for_select(condition.condition_params.map {|u| [u.name, u.id]}), :multiple => true  %>
+      			    <% elsif condition.value_type == 'S' %>
                 <%= condition.name %>
-      					<br/>
-      					<%= text_field condition_group.id, condition.id -%><br/>
-      			  <% else %>
-      			    <%= condition.name %>
-      					<br/>
-      					<%= number_field condition_group.id, condition.id -%><br/>
+      					  <br/>
+      					  <%= text_field condition_group.id, condition.id -%><br/>
+      			    <% else %>
+      			      <%= condition.name %>
+      					  <br/>
+      					  <%= number_field condition_group.id, condition.id -%><br/>
+      			    <% end %>
       			  <% end %>
-      			<% end %>
+            </div>
       		</div>
       	<% end %>
       	<!-- <hr/> -->
@@ -154,5 +156,24 @@ toRequest.onreadystatechange = function(response) {
 // Update the placeholder text.
 fromInput.placeholder = "Виберіть місто відправлення...";
 toInput.placeholder = "Виберіть місто прибуття...";
+
+</script>
+
+<script>
+
+//Show&hide condition groups
+var allInputs = document.getElementsByTagName("input");
+for (var i = 0, max = allInputs.length; i < max; i++){
+    if (allInputs[i].type === 'checkbox'){
+      allInputs[i].parentNode.childNodes[5].style.display = 'none';
+      allInputs[i].addEventListener('change', function(){
+        if(this.checked == true){
+          this.parentNode.childNodes[5].style.display = 'inline';
+        }else{
+          this.parentNode.childNodes[5].style.display = 'none';
+        }
+      });
+    }
+}
 
 </script>
