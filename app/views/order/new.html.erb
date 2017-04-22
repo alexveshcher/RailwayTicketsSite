@@ -1,125 +1,33 @@
-<!-- <select class="js-data-example-ajax" style="width:100%">
-  <option value="3620194" selected="selected">Select a value......</option>
-</select>
-
-<script>
-function formatRepo (repo) {
-  if (repo.loading) return repo.text;
-
-  var markup = '<div class="clearfix">' +
-  '<div clas="col-sm-10">' +
-  '<div class="clearfix">' +
-  '<div class="col-sm-6">' + repo.full_name + '</div>' +
-  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + repo.forks_count + '</div>' +
-  '</div>';
-
-  if (repo.description) {
-    markup += '<div>' + repo.description + '</div>';
-  }
-
-  markup += '</div></div>';
-
-  return markup;
-}
-
-function formatRepoSelection (repo) {
-  return repo.full_name;
-}
-
-$(document).ready(function(){
-
-  $(".js-data-example-ajax").select2({
-    ajax: {
-      url: "https://api.github.com/search/repositories",
-      dataType: 'json',
-      delay: 250,
-      data: function (params) {
-        return {
-          q: params.term, // search term
-          page: params.page
-        };
-      },
-      processResults: function (data, page) {
-        // parse the results into the format expected by Select2.
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON data
-        return {
-          results: data.items
-        };
-      },
-      cache: true
-    },
-    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-    minimumInputLength: 1,
-    templateResult: formatRepo, // omitted for brevity, see the source of this page
-     templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-
-  });
-});
-</script> -->
-
-
-
-
-<select class="js-data-example-ajax">
-  <option value="3620194" selected="selected">select2/select2</option>
-</select>
-
 <script type="text/javascript">
 
-function formatRepo (repo) {
-  if (repo.loading) return repo.text;
-
-  var markup = '<div class="clearfix">' +
-  '<div clas="col-sm-10">' +
-  '<div class="clearfix">' +
-  '<div class="col-sm-6">' + 'repo.full_name' + '</div>' +
-  '<div class="col-sm-3"><i class="fa fa-code-fork"></i> ' + 'repo.forks_count' + '</div>' +
-  '</div>';
-
-  if (repo.description) {
-    markup += '<div>' + repo.description + '</div>';
-  }
-
-  markup += '</div></div>';
-  console.log(repo);
-  return markup;
+function formatCity (city) {
+  return city.label;
 }
 
-function formatRepoSelection (repo) {
-  return 'repo.label';
+function formatCitySelection (city) {
+  return city.label;
 }
 
 $(document).ready(function(){
 
-  $(".js-data-example-ajax").select2({
+  $(".city_loading").select2({
     ajax: {
       url: function (params){
         return 'http://localhost:3000/places/get_stations/' + params.term;
       },
       dataType: 'json',
-      delay: 250,
-      data: function (params) {
+      delay: 1000,
+      processResults: function (data) {
         return {
-          // q: params.term, // search term
-          page: params.page
-        };
-      },
-      processResults: function (data, page) {
-        // parse the results into the format expected by Select2.
-        // since we are using custom formatting functions we do not need to
-        // alter the remote JSON data
-        return {
-          results: data.items
+          results: data
         };
       },
       cache: true
     },
-    escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
-    minimumInputLength: 1,
-    templateResult: formatRepo, // omitted for brevity, see the source of this page
-    templateSelection: formatRepoSelection // omitted for brevity, see the source of this page
-
+    escapeMarkup: function (markup) { return markup; },
+    minimumInputLength: 3,
+    templateResult: formatCity,
+    templateSelection: formatCitySelection
   });
 });
 </script>
@@ -133,15 +41,15 @@ $(document).ready(function(){
       <%= form_tag 'create' do %>
         <div class="form-group">
           <p><label for = "from_city_id">From</label><br/>
-						<input type="text" id="from_city_id" list="from_datalist" placeholder="e.g. datalist">
-						<datalist id="from_datalist"></datalist>
+						<select style="width:500px;" class="city_loading" id="from_city_id" name="from_city_id">
+            </select>
 					</p>
         </div>
 
-
       	<p><label for = "to_city_id">To</label><br/>
-				<input type="text" id="to_city_id" list="to_datalist" placeholder="e.g. datalist">
-				<datalist id="to_datalist"></datalist>
+          <select style="width:500px;" class="city_loading" id="to_city_id" name="to_city_id">
+          </select>
+        </p>
 
       	<p><label for = "from_date">From date</label><br/>
       	<%= date_field 'orders', 'from_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
