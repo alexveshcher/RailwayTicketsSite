@@ -44,6 +44,10 @@ class UkrRailway
     req.body = query
     res = https.request(req)
 
+    if JSON.parse(res.body)['error']
+      return {:value => []};
+    end
+
     JSON.parse(res.body)
   end
 
