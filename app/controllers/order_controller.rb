@@ -10,7 +10,6 @@ class OrderController < ApplicationController
     @order.user_id = current_user.id
     @order.status = 'Open'
 
-    puts @order
     # TODO create job here
     scheduler = Rufus::Scheduler.new
     scheduler.every '5s' do |job|
@@ -30,7 +29,6 @@ class OrderController < ApplicationController
     @condition_groups = ConditionGroup.all
 
 	  if @order.save
-      puts @order.id
 
       order_condition_params.each do |order_condition|
         order_condition.order_id = @order.id
@@ -50,6 +48,10 @@ class OrderController < ApplicationController
   def order_condition_params
     result = Array.new
     enabled_condition_groups = params['on']
+
+    if enabled_condition_groups.nil?
+      return result;
+    end
 
     enabled_condition_groups.each do |condition_group|
         #TODO add validation logic
