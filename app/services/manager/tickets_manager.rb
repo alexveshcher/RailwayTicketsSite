@@ -21,8 +21,16 @@ class TicketsManager
     places_filters = filters['place']
     last_filters = filters['last']
 
+    if trains.nil?
+      return []
+    end
+
     trains_filters.each do |trains_filter|
       trains = trains_filter['filter'].filter(trains, trains_filter['condition_group'])
+    end
+
+    if trains.empty?
+      return []
     end
 
     # trains are collected
@@ -51,6 +59,10 @@ class TicketsManager
       if coaches.length > 0
         train_coaches << {'train' => train, 'coaches' => coaches}
       end
+    end
+
+    if train_coaches.empty?
+      return []
     end
 
     # coaches are collected
@@ -91,6 +103,10 @@ class TicketsManager
 
     if last_filters.empty?
       return last_preparation
+    end
+
+    if last_preparation.empty?
+      return []
     end
 
     # places are collected
