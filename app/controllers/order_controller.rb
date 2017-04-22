@@ -21,21 +21,6 @@ class OrderController < ApplicationController
     @order.user_id = current_user.id
     @order.status = 'Open'
 
-    # TODO create job here
-    # scheduler = Rufus::Scheduler.new
-    # scheduler.every '5s' do |job|
-    #   status = Order.find(@order.id).status
-    #   if(status == 'Open')
-    #     puts @order.status
-    #   else
-    #     puts 'Order is no longer open'
-    #     job.unschedule
-    #   end
-    # end
-    # @order.task_id = job_id
-
-    # MonitorWorker.perform_in(10.seconds, @order)
-    # @order.task_id = 5
 
     @condition_groups = ConditionGroup.all
 
@@ -52,9 +37,28 @@ class OrderController < ApplicationController
 
       tickets_manager = TicketsManager.new
 
-      res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
-      puts res
-      UserMailer.welcome_email(res.to_s).deliver_now
+      # TODO create job here
+      scheduler = Rufus::Scheduler.new
+      scheduler.every '30s' do |job|
+        status = Order.find(@order.id).status
+        if(status == 'Open')
+          # puts @order.status
+          res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
+          puts res
+          if(!res.empty?)
+            UserMailer.welcome_email(res.to_s).deliver_now
+            @order.update_attribute :status, 'Completed'
+            puts 'Order completed and no longer tracked'
+
+            job.unschedule
+
+          end
+
+        else
+          puts 'Order is no longer open'
+          job.unschedule
+        end
+      end
 
       redirect_to :action => 'list'
 	  else
