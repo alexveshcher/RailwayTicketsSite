@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get 'order/edit'
   get 'order/delete'
   get 'order/update'
+  patch 'order/cancel/:id', to: 'order#cancel'
 
   get 'welcome/index'
   post 'welcome/send_email'

@@ -1,12 +1,29 @@
 <% if @orders.blank? %>
 	<p> There are not any orders currently in the system.</p>
 <% else %>
-	<p> These are the current orders in our system</p>
-	<ul id = "orders">
-		<% @orders.each do |c| %>
-			<li><%= link_to c.id, {:action => 'show', :id => c.id} -%></li>
-		<% end %>
-	</ul>
+	<table class="table table-bordered">
+	  <tr>
+			<th>id</th>
+	    <th>from_city_id</th>
+	    <th>to_city_id</th>
+	    <th>from_date</th>
+	    <th>to_date</th>
+			<th>status</th>
+	    <th></th>
+	  </tr>
+	<!-- <p> These are the current orders in our system</p> -->
+	<% @orders.order(:id).each do |order| %>
+  <tr>
+    <td><%= order.id %></td>
+    <td><%= order.from_city_id %></td>
+		<td><%= order.to_city_id %></td>
+		<td><%= order.from_date %></td>
+		<td><%= order.to_date %></td>
+		<td><%= order.status %></td>
+    <td><%= link_to "Cancel", "cancel/#{order.id}", method: :patch %></td>
+  </tr>
+	<% end %>
+</table>
 
 <% end %>
 <p><%= link_to "Add new Order", {:action => 'new' }%></p>

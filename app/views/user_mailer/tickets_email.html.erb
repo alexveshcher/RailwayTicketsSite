@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Good news, we found some tickets for you, <%= @user %></h1>
+    <!-- <p><%= @tickets.first %></p> -->
+    <% @tickets.each do |train| %>
+      <h4>Train <%= train['num'] %></h4>
+      <p>From <%= train['from']['station'] %> </p>
+      <p>To <%= train['till']['station'] %> </p>
+      <p>Time <%= "#{train['from']['src_date']} --- #{train['till']['src_date']} "  %> </p>
+      <p>Travel time <%= train['travel_time'] %></p>
+      <% train['types'].each do |place| %>
+        <p><%= place['places']%>  <%= place['title'] %></p>
+      <% end %>
+      <hr>
+      <br>
+    <% end %>
+  </body>
+</html>
