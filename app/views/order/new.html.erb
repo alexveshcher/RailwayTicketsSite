@@ -90,112 +90,6 @@ $(document).ready(function(){
   </div>
 </div>
 
-
-<!-- <%= link_to 'Back', {:action => 'list'} %> -->
-<script>
-
-// Get the <datalist> and <input> elements.
-var toDataList = document.getElementById('to_datalist');
-var toInput = document.getElementById('to_city_id');
-
-var fromDataList = document.getElementById('from_datalist');
-var fromInput = document.getElementById('from_city_id');
-
-var toIsRunning = false;
-var fromIsRunning = false;
-
-var fromRequest = new XMLHttpRequest();
-var toRequest = new XMLHttpRequest();
-
-toInput.addEventListener('input', function (evt) {
-  if(!toIsRunning){
-    toIsRunning = true;
-
-		if(toInput.value && toInput.value.length > 2){
-		// Set up and make the request.
-		toRequest.open('GET', 'http://localhost:3000/places/get_stations/' + toInput.value, true);
-		toRequest.send();
-		}
-		toIsRunning = false;
-  }
-});
-
-fromInput.addEventListener('input', function (evt) {
-  if(!fromIsRunning){
-    fromIsRunning = true;
-
-		if(fromInput.value && fromInput.value.length > 2){
-		// Set up and make the request.
-		fromRequest.open('GET', 'http://localhost:3000/places/get_stations/' + fromInput.value, true);
-		fromRequest.send();
-		}
-
-		fromIsRunning = false;
-  }
-});
-// Create a new XMLHttpRequest.
-
-
-// Handle state changes for the request.
-fromRequest.onreadystatechange = function(response) {
-  if (fromRequest.readyState === 4) {
-    if (fromRequest.status === 200) {
-      // Parse the JSON
-      var jsonOptions = JSON.parse(fromRequest.responseText);
-
-      // Loop over the JSON array.
-      jsonOptions.forEach(function(item) {
-        // Create a new <option> element.
-        var option = document.createElement('option');
-        // Set the value using the item in the JSON array.
-        option.value = item.label;
-        option.innerHTML = item.value;
-        // Add the <option> element to the <datalist>.
-        fromDataList.appendChild(option);
-      });
-
-      // Update the placeholder text.
-      fromInput.placeholder = "завантаження...";
-    } else {
-      // An error occured :(
-      fromInput.placeholder = "Невдала спроба! Спробуйте, будь ласка, пізніше";
-    }
-  }
-};
-
-// Handle state changes for the request.
-toRequest.onreadystatechange = function(response) {
-  if (toRequest.readyState === 4) {
-    if (toRequest.status === 200) {
-      // Parse the JSON
-      var jsonOptions = JSON.parse(toRequest.responseText);
-
-      // Loop over the JSON array.
-      jsonOptions.forEach(function(item) {
-        // Create a new <option> element.
-        var option = document.createElement('option');
-        // Set the value using the item in the JSON array.
-        option.value = item.label;
-        option.innerHTML = item.value;
-        // Add the <option> element to the <datalist>.
-        toDataList.appendChild(option);
-      });
-
-      // Update the placeholder text.
-      toInput.placeholder = "завантаження...";
-    } else {
-      // An error occured :(
-      toInput.placeholder = "Невдала спроба! Спробуйте, будь ласка, пізніше";
-    }
-  }
-};
-
-// Update the placeholder text.
-fromInput.placeholder = "Виберіть місто відправлення...";
-toInput.placeholder = "Виберіть місто прибуття...";
-
-</script>
-
 <script>
 
 //Show&hide condition groups
@@ -206,8 +100,28 @@ for (var i = 0, max = allInputs.length; i < max; i++){
       allInputs[i].addEventListener('change', function(){
         if(this.checked == true){
           this.parentNode.childNodes[5].style.display = 'inline';
+          var subInputs = this.parentNode.childNodes[5].getElementsByTagName("input");
+          var subSelects = this.parentNode.childNodes[5].getElementsByTagName("select");
+
+          for(var j = 0; j < subInputs.length; j++){
+            subInputs[j].required = true;
+          }
+
+          for(var j = 0; j < subSelects.length; j++){
+            subSelects[j].required = true;
+          }
         }else{
           this.parentNode.childNodes[5].style.display = 'none';
+          var subInputs = this.parentNode.childNodes[5].getElementsByTagName("input");
+          var subSelects = this.parentNode.childNodes[5].getElementsByTagName("select");
+
+          for(var j = 0; j < subInputs.length; j++){
+            subInputs[j].required = false;
+          }
+
+          for(var j = 0; j < subSelects.length; j++){
+            subSelects[j].required = false;
+          }
         }
       });
     }

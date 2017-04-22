@@ -12,7 +12,6 @@ class UkrRailway
     response = Net::HTTP.get_response(uri)
 
     JSON.parse(response.body)
-
   end
 
   def get_tickets_beetwen_stations(station_id_from, station_id_till, departure_date)
@@ -44,11 +43,14 @@ class UkrRailway
     req.body = query
     res = https.request(req)
 
-    if JSON.parse(res.body)['error']
-      return {:value => []};
+    result_json = JSON.parse(res.body)
+
+    # Something gone wrong with external API
+    if result_json["error"]
+      return {"value" => []};
     end
 
-    JSON.parse(res.body)
+    result_json
   end
 
   def get_tickets_for_train(station_id_from, station_id_till, departure_date, train_id, coach_type)
@@ -81,7 +83,14 @@ class UkrRailway
     req.body = query
     res = https.request(req)
 
-    JSON.parse(res.body)
+    result_json = JSON.parse(res.body)
+
+    # Something gone wrong with external API
+    if result_json["error"]
+      return {"value" => []};
+    end
+
+    result_json
   end
 
   def get_tickets_for_coach(station_id_from, station_id_till, departure_date, train_id, coach_type_id, coach_num)
@@ -113,7 +122,14 @@ class UkrRailway
     req.body = query
     res = https.request(req)
 
-    JSON.parse(res.body)
+    result_json = JSON.parse(res.body)
+
+    # Something gone wrong with external API
+    if result_json["error"]
+      return {"value" => []};
+    end
+
+    result_json
   end
 end
 
