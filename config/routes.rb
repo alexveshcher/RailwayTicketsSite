@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  get 'tasks/list'
+  get 'tasks/show'
+
   devise_for :users
   devise_scope :user do
    get '/users/sign_out' => 'devise/sessions#destroy'

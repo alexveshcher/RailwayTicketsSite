@@ -1,0 +1,25 @@
+<% if @tasks.blank? %>
+	<p> There are not any tasks currently in the system.</p>
+<% else %>
+	<table id="orders" class="table table-bordered">
+		<thead>
+	  	<tr>
+				<th>id</th>
+	    	<th>Task string id</th>
+	    	<th>Fails count</th>
+	    	<th>Created</th>
+	  	</tr>
+		</thead>
+	<!-- <p> These are the current orders in our system</p> -->
+	<tbody>
+		<% @tasks.each do |task| %>
+  		<tr>
+    		<td><%= link_to "#{task.id}", tasks_show_path(id: task.id) %></td>
+    		<td><%= task.task_string_id %></td>
+				<td><%= task.fails_count %></td>
+				<td><%= task.created_at %></td>
+  		</tr>
+		<% end %>
+	</tbody>
+</table>
+<% end %>
