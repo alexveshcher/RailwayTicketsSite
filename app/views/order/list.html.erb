@@ -1,41 +1,52 @@
+<% if can? :new, @order %>
+    <center><h3><p><%= link_to "Add new Order", {:action => 'new' }%></p></h3></center>
+<% end%>
+
 <% if @orders.blank? %>
 	<p> There are not any orders currently in the system.</p>
 <% else %>
-	<table class="table table-bordered">
-	  <tr>
-			<th>id</th>
-	    <th>from_city_id</th>
-	    <th>to_city_id</th>
-	    <th>from_date</th>
-	    <th>to_date</th>
-			<th>status</th>
-			<%if(current_user.role == 'admin') %>
-				<th>user.id</th>
-			<% end %>
-	    <th></th>
-	  </tr>
+	<table id="orders" class="table table-bordered">
+		<thead>
+	  	<tr>
+				<th>id</th>
+	    	<th>From city</th>
+	    	<th>To city</th>
+	    	<th>From date</th>
+	    	<th>To date</th>
+				<th>Status</th>
+				<%if(current_user.role == 'admin') %>
+					<th>user.id</th>
+				<% end %>
+	    	<th></th>
+	  	</tr>
+		</thead>
 	<!-- <p> These are the current orders in our system</p> -->
-	<% @orders.order(:id).each do |order| %>
-  <tr>
-    <td><%= order.id %></td>
-    <td><%= order.from_city_name %></td>
-		<td><%= order.to_city_name %></td>
-		<td><%= order.from_date %></td>
-		<td><%= order.to_date %></td>
-		<td><%= order.status %></td>
-		<%if(current_user.role == 'admin') %>
-			<td><%= order.user_id %></td>
+	<tbody>
+		<% @orders.order(:id).each do |order| %>
+  		<tr>
+    		<td><%= order.id %></td>
+    		<td><%= order.from_city_name %></td>
+				<td><%= order.to_city_name %></td>
+				<td><%= order.from_date %></td>
+				<td><%= order.to_date %></td>
+				<td><%= order.status %></td>
+				<%if(current_user.role == 'admin') %>
+					<td><%= order.user_id %></td>
+				<% end %>
+				<%if order.status == 'Open' %>
+    			<td><%= link_to "Cancel", "cancel/#{order.id}", method: :patch %></td>
+				<% else %>
+					<td></td>
+				<% end %>
+  		</tr>
 		<% end %>
-		<%if order.status == 'Open' %>
-    	<td><%= link_to "Cancel", "cancel/#{order.id}", method: :patch %></td>
-		<% else %>
-		<td></td>
-		<% end %>
-  </tr>
-	<% end %>
+	</tbody>
 </table>
 
+<script>
+$(document).ready(function() {
+    $('#orders').DataTable();
+} );
+</script>
+
 <% end %>
-<% if can? :new, @order %>
-    <p><%= link_to "Add new Order", {:action => 'new' }%></p>
-<% end%>
