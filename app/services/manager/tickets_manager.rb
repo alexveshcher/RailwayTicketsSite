@@ -1,5 +1,3 @@
-# require_relative '../api/ukr_railway.rb'
-# require_relative 'filters_resolver.rb'
 require 'time'
 
 class TicketsManager
@@ -26,14 +24,18 @@ class TicketsManager
     end
 
     if trains.empty?
-      return []
+      puts 'Tickets manager result: '
+      puts 'Trains: empty'
+      return {:status => "place", :data => []}
     end
 
     # trains are collected
     # it's time to collect coaches
 
     if coaches_filters.empty? && places_filters.empty? && last_filters.empty?
-      return trains
+      puts 'Tickets manager result: '
+      puts trains
+      return {:status => "train", :data => trains}
     end
 
     trains.each do |train|
@@ -58,14 +60,18 @@ class TicketsManager
     end
 
     if train_coaches.empty?
-      return []
+      puts 'Tickets manager result: '
+      puts 'Train coaches: empty'
+      return {:status => "coach", :data => []}
     end
 
     # coaches are collected
     # it's time to collect places
 
     if places_filters.empty? && last_filters.empty?
-      return train_coaches
+      puts 'Tickets manager result: '
+      puts train_coaches
+      return {:status => "coach", :data => train_coaches}
     end
 
     train_coaches.each do |train_coach|
@@ -95,19 +101,23 @@ class TicketsManager
              new_coaches << {'coach' => current_coach, 'places' => places}
           end
         end
+      end
 
-        if new_coaches.length > 0
-          last_preparation << {'train' => current_train, 'coaches' => new_coaches}
-        end
+      if new_coaches.length > 0
+        last_preparation << {'train' => current_train, 'coaches' => new_coaches}
       end
     end
 
     if last_filters.empty?
-      return last_preparation
+      puts 'Tickets manager result: '
+      puts last_preparation
+      return {:status => "place", :data => last_preparation}
     end
 
     if last_preparation.empty?
-      return []
+      puts 'Tickets manager result: '
+      puts 'Last preparation: empty'
+      return {:status => "place", :data => []}
     end
 
     # places are collected
@@ -139,7 +149,7 @@ class TicketsManager
     puts 'Tickets manager result: '
     puts result
 
-    result
+    {:status => "place", :data => result}
   end
 end
 
