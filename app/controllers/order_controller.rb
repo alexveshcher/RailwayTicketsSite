@@ -41,7 +41,7 @@ class OrderController < ApplicationController
 
       # TODO create job here
       scheduler = Rufus::Scheduler.new
-      scheduler.every '10s' do |job|
+      scheduler.every '45s' do |job|
         status = Order.find(@order.id).status
         if(status == 'Open')
           # puts @order.status
