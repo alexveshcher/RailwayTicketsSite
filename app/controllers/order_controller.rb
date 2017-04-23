@@ -6,14 +6,6 @@ class OrderController < ApplicationController
 	  @order = Order.new
     @condition_groups = ConditionGroup.all
     authorize! :new, @order
-
-    # current_order = Order.find(16)
-    # order_condition_converter = OrderConditionConverter.new
-    # hash_order = order_condition_converter.convert(current_order.order_conditions)
-    # puts hash_order
-    #
-    # tickets_manager = TicketsManager.new
-    # puts tickets_manager.find_acceptable_tickets(2218155, 2200001, '25.04.2017', hash_order)
   end
 
   def create
@@ -81,8 +73,6 @@ class OrderController < ApplicationController
     end
 
     enabled_condition_groups.each do |condition_group|
-        #TODO add validation logic
-
         order_conditions_hash = params[condition_group]
 
         order_conditions_hash.each do |id, values|
@@ -90,25 +80,40 @@ class OrderController < ApplicationController
 
           if current_order_condition.value_type == 'C'
             values.each do |value|
-              order_condition = OrderCondition.new({'condition_param_id' => value, 'condition_id' => id})
-              result << order_condition
+              check_condition_param = ConditionParam.find(value)
+
+              if check_condition_param.condition_id == number_or_nil(id)
+                order_condition = OrderCondition.new({'condition_param_id' => value, 'condition_id' => id})
+                result << order_condition
+              end
             end
           elsif current_order_condition.value_type == 'S'
             if !values.nil?
               values.split(/, /).each do |value|
-                order_condition = OrderCondition.new({'string_value' => value, 'condition_id' => id})
-                result << order_condition
+                if !value.to_s.empty?
+                  order_condition = OrderCondition.new({'string_value' => value, 'condition_id' => id})
+                  result << order_condition
+                end
               end
             end
           else
             if !values.nil?
-              order_condition = OrderCondition.new({'number_value' => values, 'condition_id' => id})
+              if !number_or_nil(values).nil?
+                order_condition = OrderCondition.new({'number_value' => values, 'condition_id' => id})
+                result << order_condition
+              end
             end
           end
         end
     end
 
     result
+  end
+
+  def number_or_nil(string)
+    Integer(string || '')
+  rescue ArgumentError
+    nil
   end
 
   def list

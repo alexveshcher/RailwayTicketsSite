@@ -21,10 +21,6 @@ class TicketsManager
     places_filters = filters['place']
     last_filters = filters['last']
 
-    if trains.nil?
-      return []
-    end
-
     trains_filters.each do |trains_filter|
       trains = trains_filter['filter'].filter(trains, trains_filter['condition_group'])
     end
@@ -85,19 +81,24 @@ class TicketsManager
         current_coach_num = current_coach['num']
         current_coach_class = current_coach['coach_class']
 
-        places = ukr_railway.get_tickets_for_coach(station_id_from, station_id_till, Time.parse(departure_date).to_i, current_train_id, current_coach_id, current_coach_num)['value']['places'][current_coach_class]
+        places = ukr_railway.get_tickets_for_coach(station_id_from, station_id_till, Time.parse(departure_date).to_i, current_train_id, current_coach_id, current_coach_num)['value']
 
-        places_filters.each do |place_filter|
-          places = place_filter['filter'].filter(places, place_filter['condition_group'], current_train, current_coach)
+        if !places.empty?
+          # UkrRailway magic goes here
+          places = places['places'].values[0]
+
+          places_filters.each do |place_filter|
+            places = place_filter['filter'].filter(places, place_filter['condition_group'], current_train, current_coach)
+          end
+
+          if places.length > 0
+             new_coaches << {'coach' => current_coach, 'places' => places}
+          end
         end
 
-        if places.length > 0
-           new_coaches << {'coach' => current_coach, 'places' => places}
+        if new_coaches.length > 0
+          last_preparation << {'train' => current_train, 'coaches' => new_coaches}
         end
-      end
-
-      if new_coaches.length > 0
-        last_preparation << {'train' => current_train, 'coaches' => new_coaches}
       end
     end
 
@@ -135,6 +136,7 @@ class TicketsManager
       end
     end
 
+    puts 'Tickets manager result: '
     puts result
 
     result
