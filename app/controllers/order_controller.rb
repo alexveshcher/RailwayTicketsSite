@@ -33,13 +33,16 @@ class OrderController < ApplicationController
 
       # TODO create job here
       scheduler = Rufus::Scheduler.new
-      scheduler.every '45s' do |job|
+      scheduler.every '45s', :first_in => 0.1 do |job|
         status = Order.find(@order.id).status
         if(status == 'Open')
           # puts @order.status
           res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
           puts res.size
-          if(!res.empty?)
+          # puts res
+          puts "RES:  #{res}" 
+          # if(!res.empty?)
+          if(!res[:data].empty?)
             UserMailer.tickets_email(current_user.email ,res).deliver_now
             @order.update_attribute :status, 'Completed'
             puts 'Order completed and no longer tracked'
