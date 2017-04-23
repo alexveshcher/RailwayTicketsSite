@@ -18,8 +18,8 @@
 	<% @orders.order(:id).each do |order| %>
   <tr>
     <td><%= order.id %></td>
-    <td><%= order.from_city_id %></td>
-		<td><%= order.to_city_id %></td>
+    <td><%= order.from_city_name %></td>
+		<td><%= order.to_city_name %></td>
 		<td><%= order.from_date %></td>
 		<td><%= order.to_date %></td>
 		<td><%= order.status %></td>
@@ -39,4 +39,3 @@
 <% if can? :new, @order %>
     <p><%= link_to "Add new Order", {:action => 'new' }%></p>
 <% end%>
-
