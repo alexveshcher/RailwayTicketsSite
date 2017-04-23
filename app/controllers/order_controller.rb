@@ -5,11 +5,13 @@ class OrderController < ApplicationController
   def new
 	  @order = Order.new
     @condition_groups = ConditionGroup.all
+    authorize! :new, @order
   end
 
   def create
 
 	  @order = Order.new(order_params)
+    authorize! :create, @order
     @order.user_id = current_user.id
     @order.status = 'Open'
 
@@ -31,14 +33,14 @@ class OrderController < ApplicationController
 
       # TODO create job here
       scheduler = Rufus::Scheduler.new
-      scheduler.every '30s' do |job|
+      scheduler.every '45s' do |job|
         status = Order.find(@order.id).status
         if(status == 'Open')
           # puts @order.status
           res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
-          puts res
+          puts res.size
           if(!res.empty?)
-            UserMailer.welcome_email(res.to_s).deliver_now
+            UserMailer.tickets_email(current_user.email ,res).deliver_now
             @order.update_attribute :status, 'Completed'
             puts 'Order completed and no longer tracked'
 
@@ -115,11 +117,27 @@ class OrderController < ApplicationController
   end
 
   def list
-	  @orders = Order.all
+    if(current_user.role != 'admin')
+      @user = User.find(current_user.id)
+      @orders = @user.orders
+    else
+      @orders = Order.all
+    end
+
+	  
   end
 
   def show
 	  @order = Order.find(params[:id])
+  end
+
+  def cancel
+    @order = Order.find(params[:id])
+    @order.update_attribute :status, 'Cancelled'
+    respond_to do |format|
+      format.html { redirect_to :back, notice: 'Order was successfully cancelled.' }
+      format.json { head :no_content }
+    end
   end
 
 end
