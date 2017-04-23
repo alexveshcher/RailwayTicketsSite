@@ -47,6 +47,9 @@ end
 
 #for auth
 gem 'devise'
+#for authorization
+gem 'cancancan', '~> 1.10'
+
 
 #for scheduled tasks
 gem 'rufus-scheduler'

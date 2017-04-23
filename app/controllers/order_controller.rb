@@ -5,6 +5,7 @@ class OrderController < ApplicationController
   def new
 	  @order = Order.new
     @condition_groups = ConditionGroup.all
+    authorize! :new, @order
 
     # current_order = Order.find(16)
     # order_condition_converter = OrderConditionConverter.new
@@ -18,6 +19,7 @@ class OrderController < ApplicationController
   def create
 
 	  @order = Order.new(order_params)
+    authorize! :create, @order
     @order.user_id = current_user.id
     @order.status = 'Open'
 
@@ -110,9 +112,14 @@ class OrderController < ApplicationController
   end
 
   def list
-    @user = User.find(current_user.id)
-    @orders = @user.orders
-	  # @orders = Order.all
+    if(current_user.role != 'admin')
+      @user = User.find(current_user.id)
+      @orders = @user.orders
+    else
+      @orders = Order.all
+    end
+
+	  
   end
 
   def show

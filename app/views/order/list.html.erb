@@ -9,6 +9,9 @@
 	    <th>from_date</th>
 	    <th>to_date</th>
 			<th>status</th>
+			<%if(current_user.role == 'admin') %>
+				<th>user.id</th>
+			<% end %>
 	    <th></th>
 	  </tr>
 	<!-- <p> These are the current orders in our system</p> -->
@@ -20,10 +23,20 @@
 		<td><%= order.from_date %></td>
 		<td><%= order.to_date %></td>
 		<td><%= order.status %></td>
-    <td><%= link_to "Cancel", "cancel/#{order.id}", method: :patch %></td>
+		<%if(current_user.role == 'admin') %>
+			<td><%= order.user_id %></td>
+		<% end %>
+		<%if order.status == 'Open' %>
+    	<td><%= link_to "Cancel", "cancel/#{order.id}", method: :patch %></td>
+		<% else %>
+		<td></td>
+		<% end %>
   </tr>
 	<% end %>
 </table>
 
 <% end %>
-<p><%= link_to "Add new Order", {:action => 'new' }%></p>
+<% if can? :new, @order %>
+    <p><%= link_to "Add new Order", {:action => 'new' }%></p>
+<% end%>
+

@@ -31,3 +31,5 @@ up_place = ConditionParam.new({name: "Верхнє місце", value: "up", con
 plats.save
 up_place.save
 down_place.save
+
+User.new({email: 'admin@admin.com', role: 'admin', password: '123456'}).save
