@@ -64,7 +64,7 @@ class OrderController < ApplicationController
   end
 
   def order_params
-	  params.require(:orders).permit(:from_city_id, :to_city_id, :from_date, :to_date)
+	  params.require(:orders).permit(:from_city_id, :to_city_id, :from_date, :to_date, :from_city_name, :to_city_name)
   end
 
   def order_condition_params
@@ -127,7 +127,7 @@ class OrderController < ApplicationController
       @orders = Order.all
     end
 
-	  
+
   end
 
   def show
