@@ -1,5 +1,6 @@
 # require_relative '../../lib/services/converter/order_condition_converter.rb'
 # require_relative '../../lib/services/manager/tickets_manager.rb'
+require "date"
 
 class OrderController < ApplicationController
   def new
@@ -25,6 +26,9 @@ class OrderController < ApplicationController
         order_condition.save
       end
 
+      task = Task.new("fails_count" => 0)
+      task.save
+
       order_condition_converter = OrderConditionConverter.new
       hash_order = order_condition_converter.convert(@order.order_conditions)
       # puts hash_order
@@ -33,27 +37,64 @@ class OrderController < ApplicationController
 
       # TODO create job here
       scheduler = Rufus::Scheduler.new
-      scheduler.every '45s', :first_in => 0.1 do |job|
-        status = Order.find(@order.id).status
-        if(status == 'Open')
-          # puts @order.status
-          res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
-          puts res.size
-          # puts res
-          puts "RES:  #{res}" 
-          # if(!res.empty?)
-          if(!res[:data].empty?)
-            UserMailer.tickets_email(current_user.email ,res).deliver_now
-            @order.update_attribute :status, 'Completed'
-            puts 'Order completed and no longer tracked'
+      scheduler.every '10m', :first_in => 0.1 do |job|
+        start = Time.now
 
+        begin
+          status = Order.find(@order.id).status
+          fails_count = Task.find(task.id).fails_count
+
+          # Catch bad dates
+          if (@order.from_date.to_date - Time.now.to_date).to_i > 40
+            @order.update_attribute :status, 'Unaccepted'
             job.unschedule
 
-          end
+          # Catch expired orders
+          elsif Time.now.to_date > @order.from_date.to_date
+            @order.update_attribute :status, 'Expired'
+            job.unschedule
 
-        else
-          puts 'Order is no longer open'
-          job.unschedule
+          # Catch "bad" orders
+          elsif fails_count > 5
+            @order.update_attribute :status, 'Failed'
+            job.unschedule
+
+          # Catch only open orders
+          elsif(status == 'Open')
+            task.update_attribute :fails_count, 0
+
+            res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
+            puts res.size
+            puts "RES:  #{res}"
+            if(!res[:data].empty?)
+              UserMailer.tickets_email(current_user.email ,res).deliver_now
+              @order.update_attribute :status, 'Completed'
+
+              puts 'Order completed and no longer tracked'
+              job.unschedule
+
+
+              finish = Time.now
+              execution = finish - start
+
+              cycle = Cycle.new({"execution_time" => execution, "success" => true, "task_id" => task.id, "service_message" => res.to_s})
+              cycle.save
+            end
+
+          # Catch cancelled orders
+          else
+            puts 'Order is no longer open'
+            job.unschedule
+          end
+        rescue Exception => e
+          finish = Time.now
+          execution = finish - start
+
+          new_fails_count = fails_count + 1
+          task.update_attribute :fails_count, new_fails_count
+
+          cycle = Cycle.new({"execution_time" => execution, "success" => false, "task_id" => task.id, "error_message" => e.message})
+          cycle.save
         end
       end
 
