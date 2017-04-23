@@ -17,11 +17,11 @@ class OrderConditionConverter
         saved_condition_group = result[current_condition_group.id]
       end
 
-      current_condition_values = saved_condition_group['params'][current_condition.id]
+      current_condition_values = saved_condition_group['params'][current_condition.sysname]
 
       if current_condition_values.nil?
         saved_condition_group['params'][current_condition.sysname] = Array.new
-        current_condition_values = saved_condition_group['params'][current_condition.id]
+        current_condition_values = saved_condition_group['params'][current_condition.sysname]
       end
 
       if current_condition.value_type == 'C'
@@ -33,6 +33,9 @@ class OrderConditionConverter
       end
     end
 
+    puts 'Converter result:'
+    puts result.values
+    
     result.values
   end
 end

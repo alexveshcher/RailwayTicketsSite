@@ -5,14 +5,6 @@ class OrderController < ApplicationController
   def new
 	  @order = Order.new
     @condition_groups = ConditionGroup.all
-
-    # current_order = Order.find(16)
-    # order_condition_converter = OrderConditionConverter.new
-    # hash_order = order_condition_converter.convert(current_order.order_conditions)
-    # puts hash_order
-    #
-    # tickets_manager = TicketsManager.new
-    # puts tickets_manager.find_acceptable_tickets(2218155, 2200001, '25.04.2017', hash_order)
   end
 
   def create

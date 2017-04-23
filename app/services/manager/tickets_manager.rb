@@ -84,7 +84,9 @@ class TicketsManager
         places = ukr_railway.get_tickets_for_coach(station_id_from, station_id_till, Time.parse(departure_date).to_i, current_train_id, current_coach_id, current_coach_num)['value']
 
         if !places.empty?
-          places = places['places'][current_coach_class]
+          # UkrRailway magic goes here
+          places = places['places'].values[0]
+
           places_filters.each do |place_filter|
             places = place_filter['filter'].filter(places, place_filter['condition_group'], current_train, current_coach)
           end
@@ -134,6 +136,7 @@ class TicketsManager
       end
     end
 
+    puts 'Tickets manager result: '
     puts result
 
     result
