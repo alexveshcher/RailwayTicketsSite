@@ -11,8 +11,7 @@
 				<th>id</th>
 	    	<th>From city</th>
 	    	<th>To city</th>
-	    	<th>From date</th>
-	    	<th>To date</th>
+	    	<th>Date</th>
 				<th>Status</th>
 				<%if(current_user.role == 'admin') %>
 					<th>user.id</th>
@@ -29,7 +28,6 @@
     		<td><%= order.from_city_name %></td>
 				<td><%= order.to_city_name %></td>
 				<td><%= order.from_date %></td>
-				<td><%= order.to_date %></td>
 				<td><%= order.status %></td>
 				<%if(current_user.role == 'admin') %>
 					<td><%= order.user_id %></td>

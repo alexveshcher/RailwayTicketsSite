@@ -3,7 +3,7 @@
   <head>
     <title>Railway Tickets</title>
     <%= csrf_meta_tags %>
-
+    <%= favicon_link_tag 'favicon.ico' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
@@ -28,9 +28,11 @@
           <ul class="nav navbar-nav">
             <li><a href="/"><span class="glyphicon glyphicon-home"></span> Home</a></li>
             <li><a href="#about"><span class="glyphicon glyphicon-info-sign"></span> About</a></li>
-            <li><a href="#contact"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
-            <li><a href="/order/list"><span class="glyphicon glyphicon-search"></span> Order</a></li>
-            <li><a href="/tasks/list"><span class="glyphicon glyphicon-dashboard"></span> Task</a></li>
+            <li><a href="/contacts/new"><span class="glyphicon glyphicon-envelope"></span> Contact</a></li>
+            <li><a href="/order/list"><span class="glyphicon glyphicon-search"></span> Orders</a></li>
+            <% if can? :list, Task %>
+            <li><a href="/tasks/list"><span class="glyphicon glyphicon-dashboard"></span> Tasks</a></li>
+            <% end %>
           </ul>
           <p class="text-right">
             <% if user_signed_in? %>

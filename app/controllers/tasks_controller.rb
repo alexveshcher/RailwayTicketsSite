@@ -2,6 +2,8 @@ class TasksController < ApplicationController
   def list
     task_entities = Task.all
     @tasks = Array.new
+    authorize! :list, @tasks
+
 
     task_entities.each do |task_entity|
       @tasks << enrich(task_entity)
@@ -10,6 +12,7 @@ class TasksController < ApplicationController
   def show
     task_entity = Task.find(params[:id])
     @task = enrich(task_entity)
+    authorize! :list, @task
     @task['cycles'] = task_entity.cycles
   end
 

@@ -54,11 +54,9 @@ $(document).ready(function(){
         <input type="hidden" id="from_city_name" name="orders[from_city_name]">
         <input type="hidden" id="to_city_name" name="orders[to_city_name]">
 
-      	<p><label for = "from_date">From date</label><br/>
+      	<p><label for = "from_date">Date</label><br/>
       	<%= date_field 'orders', 'from_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
 
-      	<p><label for = "to_date">To date</label><br/>
-      	<%= date_field 'orders', 'to_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
 
       	<% @condition_groups.each do |condition_group| %>
       		<div>
