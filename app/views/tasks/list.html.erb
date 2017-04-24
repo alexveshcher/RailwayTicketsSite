@@ -1,12 +1,17 @@
 <% if @tasks.blank? %>
 	<p> There are not any tasks currently in the system.</p>
 <% else %>
-	<table id="orders" class="table table-bordered">
+	<table id="tasks" class="table table-bordered">
 		<thead>
 	  	<tr>
 				<th>id</th>
-	    	<th>Task string id</th>
-	    	<th>Fails count</th>
+	    	<th>Fails</th>
+				<th>Total fails</th>
+				<th>Cycles count</th>
+				<th>Avg exec time</th>
+				<th>Max exec time</th>
+				<th>Order status</th>
+				<th>Conditions</th>
 	    	<th>Created</th>
 	  	</tr>
 		</thead>
@@ -14,12 +19,60 @@
 	<tbody>
 		<% @tasks.each do |task| %>
   		<tr>
-    		<td><%= link_to "#{task.id}", tasks_show_path(id: task.id) %></td>
-    		<td><%= task.task_string_id %></td>
-				<td><%= task.fails_count %></td>
-				<td><%= task.created_at %></td>
+    		<td><%= link_to "#{task['id']}", tasks_show_path(id: task['id']) %></td>
+				<td><%= task['fails_count'] %></td>
+				<td><%= task['total_fails_count'] %></td>
+				<td><%= task['cycles_count'] %></td>
+				<td><%= task['average_execution_time'] %> ms</td>
+				<td><%= task['max_execution_time'] %> ms</td>
+				<td><%= task['order_status'] %></td>
+				<td>
+					<%if(task['order'].order_conditions.length != 0) %>
+						<font color="green" data-toggle="modal" data-target="#modal-<%= task['order'].id %>">
+							Conditions
+						</font>
+
+						<div class="modal fade" id="modal-<%= task['order'].id %>" tabindex="-1" role="dialog" aria-labelledby="modalLabel-<%= task['order'].id %>">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="modalLabel-<%= task['order'].id %>">Order conditions</h4>
+									</div>
+									<div class="modal-body">
+										<% task['order'].order_conditions.each do |order_condition| %>
+											<b><%= order_condition.condition.name %></b>:
+											<%if(order_condition.condition.value_type == 'I') %>
+												<%= order_condition.number_value%>
+											<%elsif(order_condition.condition.value_type == 'C')%>
+												<%= order_condition.condition_param.name%>
+											<%else%>
+												<%= order_condition.string_value%>
+											<% end %>
+											<br/>
+										<% end %>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					<%else%>
+						<font color="red">
+							Conditions
+						</font>
+					<% end %>
+				</td>
+				<td><%= task['created_at'] %></td>
   		</tr>
 		<% end %>
 	</tbody>
 </table>
+
+<script>
+	$(document).ready(function() {
+    $('#tasks').DataTable();
+	});
+</script>
 <% end %>

@@ -13,9 +13,13 @@ class OrderController < ApplicationController
 
 	  @order = Order.new(order_params)
     authorize! :create, @order
+
+    task = Task.new("fails_count" => 0)
+    task.save
+
     @order.user_id = current_user.id
     @order.status = 'Open'
-
+    @order.task_id = task.id
 
     @condition_groups = ConditionGroup.all
 
@@ -25,9 +29,6 @@ class OrderController < ApplicationController
         order_condition.order_id = @order.id
         order_condition.save
       end
-
-      task = Task.new("fails_count" => 0)
-      task.save
 
       order_condition_converter = OrderConditionConverter.new
       hash_order = order_condition_converter.convert(@order.order_conditions)

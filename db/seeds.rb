@@ -35,4 +35,3 @@ up_place.save
 down_place.save
 
 User.new({email: 'admin@admin.com', role: 'admin', password: '123456'}).save
-Task.new({task_string_id: '08fg_5cvcvb', fails_count:1}).save
