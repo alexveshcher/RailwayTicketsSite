@@ -9,7 +9,8 @@ RSpec.describe Order, type: :model do
   end
 
   it "is valid with valid attributes" do
-    order = Order.new({from_city_id: 554, to_city_id: 8457, from_date: "2017-04-24", user_id: 1, status: 'Completed' })
+    date = Date.today
+    order = Order.new({from_city_id: 554, to_city_id: 8457, from_date: date, user_id: 1, status: 'Completed' })
     expect(order).to be_valid
   end
 
