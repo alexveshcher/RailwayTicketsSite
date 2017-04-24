@@ -1,5 +1,4 @@
 require 'test_helper'
-require_relative '../../app/services/place/place_type_filter'
 
 class PlaceFilterTest < ActiveSupport::TestCase
   test "place type filter kupe down" do
