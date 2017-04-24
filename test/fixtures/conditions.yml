@@ -1,11 +1,37 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  value_type: MyString
-  condition_group: one
+  name: Train numbers
+  value_type: S
+  condition_group: five
+  sysname: train_numbers
 
 two:
-  name: MyString
-  value_type: MyString
+  name: Coach types
+  value_type: C
   condition_group: two
+  sysname: coach_types
+
+three:
+  name: Place types
+  value_type: C
+  condition_group: one
+  sysname: place_types
+
+four:
+  name: Max price
+  value_type: I
+  condition_group: three
+  sysname: max_price
+
+five:
+  name: Min price
+  value_type: I
+  condition_group: three
+  sysname: min_price
+
+six:
+  name: Quantity of places
+  value_type: I
+  condition_group: four
+  sysname: places_quantity
