@@ -1,1 +1,8 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  from_city_id: 2218155
+  to_city_id: 2200001
+  from_date: 2017-04-30
+  status: Open
+  from_city_name: Дрогобич
+  to_city_name: Київ

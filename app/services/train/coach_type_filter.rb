@@ -16,11 +16,11 @@ class CoachTypeFilter
         if coach_types.include? type['id']
           actual_types << type
         end
+      end
 
-        if(actual_types.length != 0)
-          train['types'] = actual_types
-          result << train
-        end
+      if(actual_types.length != 0)
+        train['types'] = actual_types
+        result << train
       end
     end
 

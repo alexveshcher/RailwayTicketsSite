@@ -1,1 +1,35 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+one:
+  order: one
+  condition: three
+  condition_param: three
+
+two:
+  order: one
+  condition: three
+  condition_param: four
+
+three:
+  order: one
+  condition: two
+  condition_param: two
+
+four:
+  order: one
+  condition: four
+  number_value: 30000
+
+five:
+  order: one
+  condition: five
+  number_value: 20
+
+six:
+  order: one
+  condition: six
+  number_value: 4
+
+seven:
+  order: one
+  condition: one
+  string_value: 050Л
