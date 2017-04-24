@@ -10,6 +10,6 @@ class UserMailer < ApplicationMailer
   def send_to_admin(user_email, subject, name, text)
     @name = name
     @text = text
-    mail(from: user_email ,  to: 'admin@admin.com', subject: subject)
+    mail(from: 'railwaytickets@gmail.com' ,  to: 'dernazgul@gmail.com', subject: subject)
   end
 end
