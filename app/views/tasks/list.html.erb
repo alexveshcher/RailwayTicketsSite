@@ -11,6 +11,7 @@
 				<th>Avg exec time</th>
 				<th>Max exec time</th>
 				<th>Order status</th>
+				<th>Order</th>
 				<th>Conditions</th>
 	    	<th>Created</th>
 	  	</tr>
@@ -26,6 +27,30 @@
 				<td><%= task['average_execution_time'] %> ms</td>
 				<td><%= task['max_execution_time'] %> ms</td>
 				<td><%= task['order_status'] %></td>
+				<td>
+						<font color="green" data-toggle="modal" data-target="#order-<%= task['order'].id %>">
+							View
+						</font>
+
+						<div class="modal fade" id="order-<%= task['order'].id %>" tabindex="-1" role="dialog" aria-labelledby="orderLabel-<%= task['order'].id %>">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+										<h4 class="modal-title" id="orderLabel-<%= task['order'].id %>">Order conditions</h4>
+									</div>
+									<div class="modal-body">
+										<b>From city: </b><%= task['order'].from_city_name %><br/>
+										<b>To city: </b><%= task['order'].to_city_name %><br/>
+										<b>Date: </b><%= task['order'].from_date %><br/>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+									</div>
+								</div>
+							</div>
+						</div>
+				</td>
 				<td>
 					<%if(task['order'].order_conditions.length != 0) %>
 						<font color="green" data-toggle="modal" data-target="#modal-<%= task['order'].id %>">
