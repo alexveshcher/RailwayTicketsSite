@@ -24,7 +24,6 @@ class OrderController < ApplicationController
     @condition_groups = ConditionGroup.all
 
 	  if @order.save
-
       order_condition_params.each do |order_condition|
         order_condition.order_id = @order.id
         order_condition.save
@@ -32,11 +31,8 @@ class OrderController < ApplicationController
 
       order_condition_converter = OrderConditionConverter.new
       hash_order = order_condition_converter.convert(@order.order_conditions)
-      # puts hash_order
 
       tickets_manager = TicketsManager.new
-
-      # TODO create job here
       scheduler = Rufus::Scheduler.new
       scheduler.every '10m', :first_in => 0.1 do |job|
         start = Time.now
@@ -45,13 +41,8 @@ class OrderController < ApplicationController
           status = Order.find(@order.id).status
           fails_count = Task.find(task.id).fails_count
 
-          # Catch bad dates
-          if (@order.from_date.to_date - Time.now.to_date).to_i > 40
-            @order.update_attribute :status, 'Unaccepted'
-            job.unschedule
 
-          # Catch expired orders
-          elsif Time.now.to_date > @order.from_date.to_date
+          if @order.expired?
             @order.update_attribute :status, 'Expired'
             job.unschedule
 
@@ -73,7 +64,6 @@ class OrderController < ApplicationController
 
               puts 'Order completed and no longer tracked'
               job.unschedule
-
 
               finish = Time.now
               execution = finish - start
@@ -101,7 +91,12 @@ class OrderController < ApplicationController
 
       redirect_to :action => 'list'
 	  else
-		  render :action => 'new'
+      error_msg = ''
+      @order.errors.full_messages.each do |msg|
+        error_msg += msg + "\n"
+      end
+      flash.now[:alert] = error_msg
+      render action: "new"
 	  end
   end
 
