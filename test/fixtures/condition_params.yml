@@ -1,25 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  id: 1
   name: Купе
   value: К
   condition: two
 
 two:
-  id: 2
   name: Плацкарт
   value: П
   condition: two
 
 three:
-  id: 3
   name: Верхнє місце
   value: up
   condition: three
 
 four:
-  id: 4
   name: Нижнє місце
   value: down
   condition: three
