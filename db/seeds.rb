@@ -34,5 +34,5 @@ plats.save
 up_place.save
 down_place.save
 
-User.new({email: 'admin@admin.com', role: 'admin', password: '123456'}).save
-Order.new({from_city_id: 554, to_city_id: 8457, from_date: "2017-04-24", user_id: 1, status: 'Completed' }).save!
+User.new({email: 'admin@admin.com', role: 'admin', password: '123456'}).save!
+Order.new({from_city_id: 554, to_city_id: 8457, from_date: Date.today, user_id: 1, status: 'Completed' }).save!

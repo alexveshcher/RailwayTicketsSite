@@ -6,12 +6,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  enum role: [:user, :admin]
+  enum role: {user: 'user', admin: 'admin'}
   validates :role, inclusion: { in: roles }
 
   private
   def set_default_role
-    if(role.nil?)
+    if(self.role.nil?)
       self.role = 'user'
     end
 

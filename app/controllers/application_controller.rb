@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   include CanCan::ControllerAdditions
-  # protect_from_forgery with: :exception
+  protect_from_forgery with: :exception
   before_action :authenticate_user!
 
    rescue_from CanCan::AccessDenied do |exception|

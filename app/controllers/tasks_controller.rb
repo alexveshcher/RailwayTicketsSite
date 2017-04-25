@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   def list
     task_entities = Task.all
     @tasks = Array.new
-    authorize! :list, @tasks
+    authorize! :list, Task
 
 
     task_entities.each do |task_entity|
