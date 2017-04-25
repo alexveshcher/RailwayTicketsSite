@@ -22,7 +22,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Yandex Team</a>
+          <a class="navbar-brand" href="/">Yandex Team</a>
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -36,11 +36,16 @@
           </ul>
           <p class="text-right">
             <% if user_signed_in? %>
-              <font color="white">You are logged as <%= current_user.email %></font>
+              <font id='logged-user-text'><%= current_user.email %></font>
               <br/>
-              <%= link_to('Logout', destroy_user_session_path, :method => :delete, class: 'pull-right') %>
+              <%= link_to destroy_user_session_path, class: "btn btn-default btn-sm"  do %>
+                <span class="glyphicon glyphicon-log-out"></span> Log out
+              <% end %>
             <% else %>
-              <font size="6"><%= link_to('Login', new_user_session_path, class: 'pull-right')  %></font>
+              <%= link_to new_user_session_path, class: "btn btn-default btn-sm", id: 'sign-in-link'  do %>
+                <span class="glyphicon glyphicon-log-out"></span> Sign In
+              <% end %>
+
             <% end %>
           </p>
         </div>

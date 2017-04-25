@@ -3,7 +3,7 @@
     <div class="col-md-8 col-md-offset-2">
 
   <h1>Contact Us</h1>
-  <%= form_tag 'create', id: 'contact-form' do |f| %>
+  <%= form_tag 'create', id: 'contact-form', class: 'full-width-form' do |f| %>
    <div class="form-group">
      <label for="">Your name</label>
     <%= text_field_tag 'contact[name]' %>
