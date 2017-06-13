@@ -15,5 +15,5 @@ test:
   database: railway_tickets_test
   username: postgres
 
- production:
+production:
   url: <%= ENV['DATABASE_URL'] %>
