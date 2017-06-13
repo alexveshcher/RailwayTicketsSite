@@ -37,8 +37,8 @@
           <p class="text-right">
             <% if user_signed_in? %>
               <font id='logged-user-text'><%= current_user.email %></font>
-              <br/>
-              <%= link_to destroy_user_session_path, class: "btn btn-default btn-sm"  do %>
+              <!-- <br/> -->
+              <%= link_to destroy_user_session_path, class: "btn btn-default btn-sm", id: 'sign-in-link'  do %>
                 <span class="glyphicon glyphicon-log-out"></span> Log out
               <% end %>
             <% else %>

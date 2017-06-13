@@ -10,7 +10,7 @@ class UkrRailway
     uri = URI.parse("http://booking.uz.gov.ua/purchase/station/")
     uri.query = URI.encode_www_form(params)
     response = Net::HTTP.get_response(uri)
-
+    puts "Json: #{JSON.parse(response.body).size}"
     JSON.parse(response.body)
   end
 

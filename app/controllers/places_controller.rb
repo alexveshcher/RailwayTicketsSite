@@ -8,9 +8,14 @@ class PlacesController < ApplicationController
     formatted_stations = []
 
     stations = ukrRailway.get_stations(p_name)
+    puts " stations found #{stations}"
 
-    stations.each do |station|
-      formatted_stations << {:id => station['value'], :label => station['label']}
+    if stations.nil? 
+      puts "PlacesController.get_stations: returns nil"
+    else
+      stations.each do |station|
+        formatted_stations << {:id => station['value'], :label => station['title']}
+      end
     end
     render json: formatted_stations
   end

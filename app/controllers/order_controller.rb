@@ -34,7 +34,7 @@ class OrderController < ApplicationController
 
       tickets_manager = TicketsManager.new
       scheduler = Rufus::Scheduler.new
-      scheduler.every '10m', :first_in => 0.1 do |job|
+      scheduler.every '30s', :first_in => 0.1 do |job|
         start = Time.now
 
         begin
