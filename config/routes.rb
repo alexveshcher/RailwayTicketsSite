@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   post 'welcome/send_email'
   get 'order/new'
 
-  get '/places/get_stations/:name', to: 'places#get_stations'
+  get '/places/get_stations/:name', to: 'places#get_stations', as: 'get_stations'
   get '/contacts/new'
   post '/contacts/create'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

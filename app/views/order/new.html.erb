@@ -13,7 +13,8 @@ $(document).ready(function(){
   $(".city_loading").select2({
     ajax: {
       url: function (params){
-        return 'http://localhost:3000/places/get_stations/' + params.term;
+        return '<%= get_stations_url('x').chomp('x')%>'+ params.term;
+        // return 'http://localhost:3000/places/get_stations/' + params.term;
       },
       dataType: 'json',
       delay: 1000,
