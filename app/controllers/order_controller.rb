@@ -33,6 +33,17 @@ class OrderController < ApplicationController
       hash_order = order_condition_converter.convert(@order.order_conditions)
 
       tickets_manager = TicketsManager.new
+
+      res = tickets_manager.find_acceptable_tickets(@order.from_city_id, @order.to_city_id, @order.from_date.strftime("%d.%m.%Y"), hash_order)
+      if !res[:data].empty?
+        @tickets = res
+        @order.update_attribute :status, 'Completed'
+        render 'instant'
+        return
+      end
+      
+
+
       scheduler = Rufus::Scheduler.new
       scheduler.every '30s', :first_in => 0.1 do |job|
         start = Time.now

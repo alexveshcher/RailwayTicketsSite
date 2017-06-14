@@ -1,0 +1,49 @@
+<h1>We instantly found the tickets you ordered</h1>
+    <hr>
+    <!-- <p><%= @tickets.first %></p> -->
+    <% if @tickets[:status] == 'train' %>
+      <% @tickets[:data].each do |train| %>
+        <h4>Train <%= train['num'] %></h4>
+        <p>From <%= train['from']['station'] %> </p>
+        <p>To <%= train['till']['station'] %> </p>
+        <p>Time <%= "#{train['from']['src_date']} --- #{train['till']['src_date']} "  %> </p>
+        <p>Travel time <%= train['travel_time'] %></p>
+        <% train['types'].each do |place| %>
+          <p><%= place['places']%>  <%= place['title'] %></p>
+        <% end %>
+        <hr>
+        <br>
+      <% end %>
+    <% end %>
+    <% if @tickets[:status] == 'place' %>
+      <% @tickets[:data].each do |train| %>
+        <h4>Train <%= train['train']['num'] %></h4>
+        <p>From <%= train['train']['from']['station'] %> </p>
+        <p>To <%= train['train']['till']['station'] %> </p>
+        <p>Time <%= "#{train['train']['from']['src_date']} --- #{train['train']['till']['src_date']} "  %> </p>
+        <p>Travel time <%= train['train']['travel_time'] %></p>
+        <% train['coaches'].each do |coach| %>
+          <h5>Vagon <%= coach['coach']['num']%> type <%= coach['coach']['type'] %></h5>
+          <p><% coach['places'].each do |place| %>
+            <span><%= place %></span>
+          <% end %>
+          </p>
+        <% end %>
+        <hr>
+        <br>
+      <% end %>
+    <% end %>
+    <% if @tickets[:status] == 'coach' %>
+      <% @tickets[:data].each do |train| %>
+        <h4>Train <%= train['train']['num'] %></h4>
+        <p>From <%= train['train']['from']['station'] %> </p>
+        <p>To <%= train['train']['till']['station'] %> </p>
+        <p>Time <%= "#{train['train']['from']['src_date']} --- #{train['train']['till']['src_date']} "  %> </p>
+        <p>Travel time <%= train['train']['travel_time'] %></p>
+        <% train['coaches'].each do |coach| %>
+          <h5>Coach <%= coach['num']%> type <%= coach['type'] %> price: <%=  coach['prices'].values.first/100 %> UAH</h5>
+        <% end %>
+        <hr>
+        <br>
+      <% end %>
+    <% end %>

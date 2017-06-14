@@ -56,7 +56,22 @@ $(document).ready(function(){
         <input type="hidden" id="to_city_name" name="orders[to_city_name]">
 
       	<p><label for = "from_date">Date</label><br/>
-      	<%= date_field 'orders', 'from_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p>
+          <input class="input-block " value="<%= Time.now.strftime("%d-%m-%Y") %>" type="text" name="orders[from_date]" id="orders_from_date" >
+
+                      <script>
+                          $(document).ready(function() {
+                              var date_input = $('input[name="orders[from_date]"]');
+                              var container = $('.bootstrap-iso form').length > 0 ? $('.bootstrap-iso form').parent() : "body";
+                              var options = {
+                                  format: 'dd-mm-yyyy',
+                                  container: container,
+                                  todayHighlight: true,
+                                  autoclose: true,
+                              };
+                              date_input.datepicker(options);
+                          })
+                      </script>
+      	<!-- <%= date_field 'orders', 'from_date', class: 'input-block', value: Time.now.strftime("%Y-%m-%d") %></p> -->
 
 
       	<% @condition_groups.each do |condition_group| %>
